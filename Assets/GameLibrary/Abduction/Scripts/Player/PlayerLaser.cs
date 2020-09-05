@@ -1,0 +1,86 @@
+﻿using Abduction.Data;
+using Abduction.Systems;
+using System.Collections;
+using UnityEngine;
+
+namespace Abduction.Player
+{
+    public class PlayerLaser : MonoBehaviour
+    {
+        #region Serialized Fields
+
+        [SerializeField]
+        private float cooldown;
+
+        #endregion
+
+        #region Member Variables
+
+        private WaitForSeconds cooldownYield;
+        private Coroutine cooldownRoutine;
+
+        private bool isFiring;
+        private bool onCooldown;
+
+        #endregion
+
+        #region Properties
+
+        public Sprite LaserSprite { get; set; }
+
+        public bool IsFiring
+        {
+            get { return isFiring; }
+            set
+            {
+                if (!onCooldown && value)
+                    Fire();
+            }
+        }
+
+        #endregion
+
+        #region Life Cycle
+
+        private void Awake()
+        {
+            cooldownYield = new WaitForSeconds(cooldown);
+        }
+
+        #endregion
+
+        #region Firing Methods
+
+        private void Fire()
+        {
+            ProjectileSystem.Events.Dispatch(ProjectileEvents.Spawn, new ProjectileEventData
+            {
+                ProjectileSprite = LaserSprite,
+                ProjectileOrigin = transform.position,
+                ProjectileDirection = -transform.up
+            });
+
+            if (cooldownRoutine != null)
+                StopCoroutine(cooldownRoutine);
+
+            cooldownRoutine = StartCoroutine(LaserCooldown());
+        }
+
+        private IEnumerator LaserCooldown()
+        {
+            // Laser is now firing.
+            isFiring = true;
+            onCooldown = true;
+
+            yield return cooldownYield;
+
+            // Laser is no longer firing.
+            isFiring = false;
+            onCooldown = false;
+
+            cooldownRoutine = null;
+        }
+
+        #endregion
+    }
+}

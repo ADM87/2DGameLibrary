@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79225ae6157f25a4e984747b1c6edde1, type: 3}
+  m_Name: CharacterYellow
+  m_EditorClassIdentifier: 
+  characterSprite: {fileID: 21300000, guid: 7f7af4856052c814e9dae38f780b9e51, type: 3}
+  characterBeam: {fileID: 21300000, guid: d65b487ba307dca41a074fa8b92cf00f, type: 3}
+  characterLaser: {fileID: 21300000, guid: 79548930e64995d4ba3fdd9f2385c027, type: 3}
+  characterBurst: {fileID: 21300000, guid: a90a939d575e5eb478e2552ee37ada71, type: 3}
+  characterGroundBurst: {fileID: 21300000, guid: 3501ee4c33e6dd448879f2a350539072, type: 3}
+  characterRing: {fileID: 21300000, guid: 70f9ef8e08a3f5d4999a00bb6866d848, type: 3}

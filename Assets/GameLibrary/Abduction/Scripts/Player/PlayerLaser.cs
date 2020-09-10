@@ -1,5 +1,5 @@
 ﻿using Abduction.Data;
-using Abduction.Systems;
+using Abduction.Systems.Projectiles;
 using System.Collections;
 using UnityEngine;
 
@@ -27,6 +27,9 @@ namespace Abduction.Player
         #region Properties
 
         public Sprite LaserSprite { get; set; }
+        public Sprite BurstSprite { get; set; }
+
+        public string SenderTag { get; set; }
 
         public bool IsFiring
         {
@@ -55,7 +58,9 @@ namespace Abduction.Player
         {
             ProjectileSystem.Events.Dispatch(ProjectileEvents.Spawn, new ProjectileEventData
             {
+                SenderTag = SenderTag,
                 ProjectileSprite = LaserSprite,
+                ProjectileBurst = BurstSprite,
                 ProjectileOrigin = transform.position,
                 ProjectileDirection = -transform.up
             });

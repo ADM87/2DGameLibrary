@@ -65,6 +65,9 @@ namespace Abduction.Player
             playerRenderer.sprite = config.CharacterSprite;
             playerBeam.BeamSprite = config.CharacterBeam;
             playerLaser.LaserSprite = config.CharacterLaser;
+            playerLaser.BurstSprite = config.CharacterBurst;
+
+            playerLaser.SenderTag = gameObject.tag;
         }
 
         private void OnEnable()

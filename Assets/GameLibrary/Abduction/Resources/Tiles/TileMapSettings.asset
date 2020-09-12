@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aef94deb24ded842a82ad3d6f41031d, type: 3}
+  m_Name: TileMapSettings
+  m_EditorClassIdentifier: 
+  mapSize: {x: 200, y: 100}
+  fillPercentage: 47
+  smoothingIterations: 5
+  tileSet:
+  - name: grass
+    tile: {fileID: 11400000, guid: 0f0fc30a7a297c34087673b258b0e03c, type: 2}
+  - name: dirt
+    tile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
+  - name: stone
+    tile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}

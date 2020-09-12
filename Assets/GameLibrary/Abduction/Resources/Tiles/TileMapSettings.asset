@@ -13,12 +13,95 @@ MonoBehaviour:
   m_Name: TileMapSettings
   m_EditorClassIdentifier: 
   mapSize: {x: 200, y: 100}
-  fillPercentage: 47
   smoothingIterations: 5
-  tileSet:
-  - name: grass
-    tile: {fileID: 11400000, guid: 0f0fc30a7a297c34087673b258b0e03c, type: 2}
-  - name: dirt
-    tile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
-  - name: stone
-    tile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}
+  layers:
+  - name: Grass
+    topTile: {fileID: 11400000, guid: 0f0fc30a7a297c34087673b258b0e03c, type: 2}
+    fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
+    start: 25
+    depth: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+    modifierRange: {x: 48, y: 48}
+  - name: Dirt
+    topTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
+    fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
+    start: 35
+    depth: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+    modifierRange: {x: 40, y: 40}
+  - name: Stone
+    topTile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}
+    fillTile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}
+    start: 65
+    depth: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+    modifierRange: {x: 45, y: 50}

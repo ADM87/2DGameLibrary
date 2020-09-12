@@ -1,19 +1,28 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Abduction.Systems.TileMaps
 {
+    public class TileLayerSorter : IComparer<TileMapLayer>
+    {
+        public int Compare(TileMapLayer x, TileMapLayer y) => x.StartDepth - y.StartDepth;
+    }
+
     public class TileMapGenerator
     {
         public void GenerateMap(Tilemap tilemap, TileMapSettings settings)
         {
+            TileMapLayer[] layers = settings.Layers;
+            Array.Sort(layers, new TileLayerSorter());
+
             int width = settings.MapSize.x;
             int height = settings.MapSize.y;
-            int smoothingIterations = settings.SmoothingIterations;
 
             // Generate map layout
-            int[,] map = GenerateNoise(width, height, settings.FillPercentage);
-            for (int i = 0; i < smoothingIterations; i++)
+            int[,] map = GenerateNoise(width, height, layers);
+            for (int i = 0; i < settings.SmoothingIterations; i++)
                 map = SmoothNoise(map, width, height);
 
             int size = width * height;
@@ -21,36 +30,65 @@ namespace Abduction.Systems.TileMaps
             Vector3Int[] positions = new Vector3Int[size];
             TileBase[] tiles = new TileBase[size];
 
-            // Generate tilemap data.
-            for (int x = 0; x < width; x++)
+            foreach (TileMapLayer layer in layers)
             {
-                for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
-                    int i = x + (y * width);
+                    for (int y = layer.StartDepth; y < layer.EndDepth && y < height; y++)
+                    {
+                        int i = x + (y * width);
 
-                    positions[i] = new Vector3Int(x - Mathf.FloorToInt(width * 0.5f), y - Mathf.FloorToInt(height * 0.5f), 0);
+                        int posX = x - Mathf.FloorToInt(width * 0.5f);
+                        int posY = (height - y) - Mathf.FloorToInt(height * 0.5f);
 
-                    if (map[x, y] == 1)
-                        tiles[i] = settings.TileSet[2].Tile;
+                        positions[i] = new Vector3Int(posX, posY, 0);
+
+                        if (map[x, y] > 0)
+                        {
+                            if (y - 1 > 0)
+                                tiles[i] = map[x, y - 1] == 0 ? layer.TopTile : layer.FilleTile;
+                            else
+                                tiles[i] = layer.FilleTile;
+                        }
+                    }
                 }
             }
 
             tilemap.SetTiles(positions, tiles);
         }
 
-        private int[,] GenerateNoise(int width, int height, float fillPercentage)
+        private int[,] GenerateNoise(int width, int height, TileMapLayer[] layers)
         {
             int[,] map = new int[width, height];
-            for (int x = 0; x < width; x++)
+
+            foreach (TileMapLayer layer in layers)
             {
-                for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
-                    if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
-                        map[x, y] = 1;
-                    else
-                        map[x, y] = Random.value * 100 < fillPercentage ? 1 : 0;
+                    for (int y = layer.StartDepth; y < layer.EndDepth && y < height; y++)
+                    {
+                        if (x == 0 || x == width - 1 || y == height - 1)
+                        {
+                            map[x, y] = 1;
+                            continue;
+                        }
+
+                        if (layer.ModifierDelta > 0)
+                        {
+                            int i = y - layer.StartDepth;
+                            float step = -1 + (layer.Curve.Evaluate(i / (float)layer.Height) * 2f);
+                            float percentage = layer.MinModifier + (Mathf.Abs(step) * layer.ModifierDelta);
+
+                            map[x, y] = UnityEngine.Random.value * 100 < percentage ? 1 : 0;
+                        }
+                        else
+                        {
+                            map[x, y] = UnityEngine.Random.value * 100 < layer.MaxModifier ? 1 : 0;
+                        }
+                    }
                 }
             }
+
             return map;
         }
 
@@ -78,13 +116,18 @@ namespace Abduction.Systems.TileMaps
             {
                 for (int ny = y - 1; ny <= y + 1; ny++)
                 {
-                    if (nx < 0 || nx >= width || ny < 0 || ny >= height)
-                        neighbors++;
-                    else if (nx != x || ny != y)
+                    if (InMap(nx, ny, width, height))
                         neighbors += map[nx, ny];
+                    else
+                        neighbors++;
                 }
             }
             return neighbors;
+        }
+
+        private bool InMap(int x, int y, int width, int height)
+        {
+            return x >= 0 && y >= 0 && x < width && y < height;
         }
     }
 }

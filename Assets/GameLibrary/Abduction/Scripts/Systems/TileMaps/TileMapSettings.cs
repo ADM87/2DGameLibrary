@@ -17,7 +17,11 @@ namespace Abduction.Systems.TileMaps
 
         [SerializeField]
         private TileBase fillTile;
-        public TileBase FilleTile { get { return fillTile; } }
+        public TileBase FillTile { get { return fillTile; } }
+
+        [SerializeField]
+        private TileBase blendInTile;
+        public TileBase BlendInTile { get { return blendInTile; } }
 
         [SerializeField]
         private int startDepth;
@@ -28,8 +32,20 @@ namespace Abduction.Systems.TileMaps
         public int EndDepth { get { return endDepth; } }
 
         [SerializeField]
+        private float blendPercentage;
+        public float BlendPercentage { get { return blendPercentage; } }
+
+        [SerializeField]
+        private float blendChance;
+        public float BlendChance { get { return blendChance; } }
+
+        [SerializeField]
         private AnimationCurve curve;
         public AnimationCurve Curve { get { return curve; } }
+
+        [SerializeField]
+        private AnimationCurve blendCurve;
+        public AnimationCurve BlendCurve { get { return blendCurve; } }
 
         [SerializeField]
         private Vector2Int modifierRange;

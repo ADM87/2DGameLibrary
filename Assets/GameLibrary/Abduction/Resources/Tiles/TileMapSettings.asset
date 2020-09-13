@@ -18,38 +18,11 @@ MonoBehaviour:
   - name: Grass
     topTile: {fileID: 11400000, guid: 0f0fc30a7a297c34087673b258b0e03c, type: 2}
     fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
-    start: 25
-    depth: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 0
-    modifierRange: {x: 48, y: 48}
-  - name: Dirt
-    topTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
-    fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
-    start: 35
-    depth: 0
+    blendInTile: {fileID: 0}
+    startDepth: 25
+    endDepth: 35
+    blendPercentage: 0
+    blendChance: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -74,21 +47,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
-    modifierRange: {x: 40, y: 40}
-  - name: Stone
-    topTile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}
-    fillTile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}
-    start: 65
-    depth: 0
-    curve:
+    blendCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 1
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0
@@ -97,11 +64,125 @@ MonoBehaviour:
         value: 1
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 0
+      m_RotationOrder: 4
     modifierRange: {x: 45, y: 50}
+  - name: Dirt
+    topTile: {fileID: 0}
+    fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
+    blendInTile: {fileID: 0}
+    startDepth: 35
+    endDepth: 50
+    blendPercentage: 0
+    blendChance: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+    blendCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    modifierRange: {x: 30, y: 40}
+  - name: Stone
+    topTile: {fileID: 0}
+    fillTile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}
+    blendInTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
+    startDepth: 50
+    endDepth: 100
+    blendPercentage: 0.6
+    blendChance: 45
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+    blendCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    modifierRange: {x: 35, y: 50}

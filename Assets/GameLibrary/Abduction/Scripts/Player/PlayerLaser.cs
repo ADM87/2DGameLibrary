@@ -29,6 +29,8 @@ namespace Abduction.Player
         public Sprite LaserSprite { get; set; }
         public Sprite BurstSprite { get; set; }
 
+        public Vector2 Aim { get; set; }
+
         public string SenderTag { get; set; }
 
         public bool IsFiring
@@ -36,6 +38,9 @@ namespace Abduction.Player
             get { return isFiring; }
             set
             {
+                if (Aim.magnitude == 0)
+                    return;
+
                 if (!onCooldown && value)
                     Fire();
             }
@@ -62,7 +67,7 @@ namespace Abduction.Player
                 ProjectileSprite = LaserSprite,
                 ProjectileBurst = BurstSprite,
                 ProjectileOrigin = transform.position,
-                ProjectileDirection = -transform.up
+                ProjectileDirection = Aim
             });
 
             if (cooldownRoutine != null)

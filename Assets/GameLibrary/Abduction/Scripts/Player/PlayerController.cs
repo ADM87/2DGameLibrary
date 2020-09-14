@@ -19,6 +19,9 @@ namespace Abduction.Player
         private float roll = 45f;
 
         [SerializeField]
+        private Camera gameCamera;
+
+        [SerializeField]
         private Transform playerSprite;
 
         [SerializeField]
@@ -43,7 +46,11 @@ namespace Abduction.Player
         #region Member Variables
 
         private Vector2 movement;
+        private Vector2 mousePosition;
+        private Vector2 aimDirection;
+
         private bool fireLaser;
+        private bool mouseAim;
 
         #endregion
 
@@ -77,6 +84,8 @@ namespace Abduction.Player
         private void OnEnable()
         {
             InputEvents.Game.Subscribe(GameEvents.Move, OnMove);
+            InputEvents.Game.Subscribe(GameEvents.MouseAim, OnMouseAim);
+            InputEvents.Game.Subscribe(GameEvents.JoystickAim, OnJoystickAim);
             InputEvents.Game.Subscribe(GameEvents.FireBeam, OnFireBeam);
             InputEvents.Game.Subscribe(GameEvents.FireLaser, OnFireLaser);
         }
@@ -84,6 +93,8 @@ namespace Abduction.Player
         private void OnDisable()
         {
             InputEvents.Game.Unsubscribe(GameEvents.Move, OnMove);
+            InputEvents.Game.Unsubscribe(GameEvents.MouseAim, OnMouseAim);
+            InputEvents.Game.Unsubscribe(GameEvents.JoystickAim, OnJoystickAim);
             InputEvents.Game.Unsubscribe(GameEvents.FireBeam, OnFireBeam);
             InputEvents.Game.Unsubscribe(GameEvents.FireLaser, OnFireLaser);
         }
@@ -94,7 +105,21 @@ namespace Abduction.Player
 
         private void Update()
         {
-            playerLaser.IsFiring = !playerBeam.IsActive && fireLaser;
+            if (mouseAim)
+            {
+                Vector2 screenPosition = gameCamera.WorldToScreenPoint(transform.position);
+
+                float x = mousePosition.x - screenPosition.x;
+                float y = mousePosition.y - screenPosition.y;
+
+                aimDirection.Set(x, y);
+            }
+
+            playerLaser.Aim = aimDirection;
+            playerBeam.Aim = aimDirection;
+
+            if (!aimDirection.Equals(Vector2.zero))
+                playerLaser.IsFiring = !playerBeam.IsActive && fireLaser;
         }
 
         private void FixedUpdate()
@@ -125,9 +150,21 @@ namespace Abduction.Player
             movement = inputValue.Get<Vector2>();
         }
 
+        private void OnMouseAim(InputValue inputValue)
+        {
+            mousePosition = inputValue.Get<Vector2>();
+            mouseAim = true;
+        }
+
+        private void OnJoystickAim(InputValue inputValue)
+        {
+            mouseAim = false;
+            aimDirection = inputValue.Get<Vector2>();
+        }
+
         private void OnFireBeam(InputValue inputValue)
         {
-            if (playerLaser.IsFiring)
+            if (playerLaser.IsFiring && !aimDirection.Equals(Vector2.zero))
                 return;
 
             playerBeam.IsActive = inputValue.isPressed;

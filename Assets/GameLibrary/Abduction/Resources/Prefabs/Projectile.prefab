@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   burstTime: 0.06
-  speed: 15
+  speed: 20
   lifeSpan: 1
   collisionLayers:
     serializedVersion: 2

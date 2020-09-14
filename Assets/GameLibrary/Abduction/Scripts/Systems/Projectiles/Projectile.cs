@@ -92,7 +92,10 @@ namespace Abduction.Systems.Projectiles
             Vector2 normalizedPivot = new Vector2(sprite.pivot.x / sprite.rect.width, sprite.pivot.y / sprite.rect.height);
 
             projectileCollider.offset = (Vector2.one * 0.5f) + new Vector2(-normalizedPivot.x, normalizedPivot.y);
-            projectileBody.velocity = direction * speed;
+            projectileBody.velocity = direction.normalized * speed;
+
+            float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, degrees + 90);
 
             BeginLifeCountDown();
         }

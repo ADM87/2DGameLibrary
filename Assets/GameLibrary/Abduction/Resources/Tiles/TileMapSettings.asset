@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: TileMapSettings
   m_EditorClassIdentifier: 
   mapSize: {x: 200, y: 100}
+  worldOffset: {x: 0, y: -18}
   smoothingIterations: 5
   layers:
   - name: Grass
@@ -128,7 +129,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    modifierRange: {x: 30, y: 40}
+    modifierRange: {x: 35, y: 40}
   - name: Stone
     topTile: {fileID: 0}
     fillTile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}
@@ -185,4 +186,4 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    modifierRange: {x: 35, y: 50}
+    modifierRange: {x: 30, y: 50}

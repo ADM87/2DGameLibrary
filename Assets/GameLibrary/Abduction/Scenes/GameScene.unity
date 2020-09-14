@@ -178,8 +178,8 @@ GameObject:
   - component: {fileID: 117904374}
   - component: {fileID: 117904375}
   - component: {fileID: 117904376}
-  m_Layer: 0
-  m_Name: Grid
+  m_Layer: 9
+  m_Name: '[TileWorld]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,7 @@ Transform:
   m_Children:
   - {fileID: 1599508970}
   m_Father: {fileID: 1386177247}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &117904375
 Grid:
@@ -258,9 +258,8 @@ Transform:
   - {fileID: 1044624837}
   - {fileID: 738799562}
   - {fileID: 71761174}
-  - {fileID: 519420032}
   m_Father: {fileID: 1386177247}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &332790973
 MonoBehaviour:
@@ -403,8 +402,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 332790972}
-  m_RootOrder: 3
+  m_Father: {fileID: 1386177247}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &738799561
 GameObject:
@@ -621,6 +620,7 @@ GameObject:
   - component: {fileID: 1386177247}
   - component: {fileID: 1386177248}
   - component: {fileID: 1386177249}
+  - component: {fileID: 1386177251}
   - component: {fileID: 1386177250}
   m_Layer: 0
   m_Name: '[Scene]'
@@ -640,6 +640,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 519420032}
   - {fileID: 332790972}
   - {fileID: 117904374}
   m_Father: {fileID: 0}
@@ -700,6 +701,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 5418223714285628067, guid: a9d24a1733491d345902b1399cdd2197, type: 3}
+--- !u!114 &1386177251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386177246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0da9539884a89ee4eaf5feebadea0177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileWorld: {fileID: 117904376}
+  gameCamera: {fileID: 519420031}
+  playerController: {fileID: 332790973}
 --- !u!1 &1599508969
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,7 +727,8 @@ GameObject:
   - component: {fileID: 1599508970}
   - component: {fileID: 1599508972}
   - component: {fileID: 1599508971}
-  m_Layer: 0
+  - component: {fileID: 1599508973}
+  m_Layer: 9
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -842,3 +859,19 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!19719996 &1599508973
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599508969}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0.00001

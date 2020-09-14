@@ -66,6 +66,10 @@ namespace Abduction.Systems.TileMaps
         public Vector2Int MapSize { get { return mapSize; } }
 
         [SerializeField]
+        private Vector2 worldOffset;
+        public Vector2 WorldOffset { get { return worldOffset; } }
+
+        [SerializeField]
         private int smoothingIterations;
         public int SmoothingIterations { get { return smoothingIterations; } }
 

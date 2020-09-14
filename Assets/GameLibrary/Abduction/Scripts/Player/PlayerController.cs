@@ -43,9 +43,13 @@ namespace Abduction.Player
         #region Member Variables
 
         private Vector2 movement;
-        private Vector2 velocity;
-
         private bool fireLaser;
+
+        #endregion
+
+        #region Properties
+
+        public Vector2 Velocity { get; private set; }
 
         #endregion
 
@@ -95,12 +99,12 @@ namespace Abduction.Player
 
         private void FixedUpdate()
         {
-            velocity = Vector2.MoveTowards(velocity, movement * speed, drag);
+            Velocity = Vector2.MoveTowards(Velocity, movement * speed, drag);
 
             float rotation = playerSprite.localEulerAngles.z;
-            if (velocity.x != 0f)
+            if (Velocity.x != 0f)
             {
-                float angle = (-velocity.x / speed) * roll;
+                float angle = (-Velocity.x / speed) * roll;
                 rotation = Mathf.MoveTowardsAngle(rotation, angle, 3f);
             }
             else
@@ -109,7 +113,7 @@ namespace Abduction.Player
             }
             playerSprite.localEulerAngles = new Vector3(0, 0, rotation);
 
-            playerBody.velocity = velocity;
+            playerBody.velocity = Velocity;
         }
 
         #endregion

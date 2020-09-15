@@ -33,8 +33,8 @@ namespace Abduction.Systems.Projectiles
         private void Awake()
         {
             projectilePool = new Pool<Projectile>(CreateProjectile, DestroyProjectile);
-            projectileContainer = new GameObject("[ProjectileContainer]").transform;
 
+            projectileContainer = new GameObject("[ProjectileContainer]").transform;
             projectileContainer.parent = transform;
         }
 

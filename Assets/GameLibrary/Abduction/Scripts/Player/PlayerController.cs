@@ -1,4 +1,4 @@
-﻿using Abduction.Data;
+using Abduction.Data;
 using Abduction.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;

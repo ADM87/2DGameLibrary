@@ -3,12 +3,13 @@
 namespace Abduction.Events
 {
     /// <summary>
-    /// 
+    /// TODO - Add subscribe once functionality
     /// </summary>
     /// <typeparam name="TEventType"></typeparam>
     /// <typeparam name="TEventData"></typeparam>
     public class EventEmitter<TEventType, TEventData>
     {
+
         public delegate void EventHandler(TEventData data);
 
         private Dictionary<TEventType, EventHandler> handlers;

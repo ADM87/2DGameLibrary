@@ -224,6 +224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4bbd28159fb7d488df63a15589a49f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physicsTilePrefab: {fileID: 8872625262632645978, guid: 8f4cc15be840c554f99fbdab5cda0714, type: 3}
+  map: {fileID: 1599508972}
   mapSettings: {fileID: 11400000, guid: 0da640d0461a02a41a6db0972c2fa986, type: 2}
 --- !u!1 &332790971
 GameObject:
@@ -300,12 +302,12 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 35078cb8fe9b2d548ac4ef2adbe244f9, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!58 &332790975
 CircleCollider2D:
@@ -499,6 +501,7 @@ GameObject:
   - component: {fileID: 738799562}
   - component: {fileID: 738799564}
   - component: {fileID: 738799565}
+  - component: {fileID: 738799563}
   m_Layer: 8
   m_Name: '[Beam]'
   m_TagString: Untagged
@@ -521,6 +524,27 @@ Transform:
   m_Father: {fileID: 332790972}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &738799563
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738799561}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &738799564
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -534,7 +558,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.5}
+  m_Offset: {x: 0, y: -1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 1}
@@ -560,6 +584,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beamSprite: {fileID: 416501041}
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &1044624836
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,7 +23,12 @@ namespace Abduction.Systems.TileMaps
 
         private SpriteRenderer tileRenderer;
         private BoxCollider2D tileCollider;
-        private Rigidbody2D tileBody;
+
+        #endregion
+
+        #region Properties
+
+        public Rigidbody2D TileBody { get; private set; }
 
         #endregion
 
@@ -33,7 +38,7 @@ namespace Abduction.Systems.TileMaps
         {
             tileRenderer = GetComponent<SpriteRenderer>();
             tileCollider = GetComponent<BoxCollider2D>();
-            tileBody = GetComponent<Rigidbody2D>();
+            TileBody = GetComponent<Rigidbody2D>();
 
             lifeWait = new WaitForSeconds(lifeSpan);
         }
@@ -45,21 +50,24 @@ namespace Abduction.Systems.TileMaps
         public void Spawn(Sprite sprite, Vector2 size)
         {
             tileCollider.enabled = true;
-            tileBody.simulated = true;
+            TileBody.simulated = true;
 
             tileRenderer.sprite = sprite;
             tileCollider.size = size;
-
-            BeginLifeCountDown();
         }
 
         public void Despawn()
         {
             tileCollider.enabled = false;
-            tileBody.simulated = false;
+            TileBody.simulated = false;
 
             tileRenderer.sprite = null;
             tileCollider.size = Vector2.one * 0.001f;
+        }
+
+        public void Drop()
+        {
+            BeginLifeCountDown();
         }
 
         #endregion

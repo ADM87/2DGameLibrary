@@ -20,10 +20,13 @@ namespace Abduction.Player
 
         private SpriteRenderer beamRenderer;
         private BoxCollider2D beamCollider;
+        private SpringJoint2D beamConnector;
 
         #endregion
 
         #region Member Variables
+
+        private PhysicsTile attachedTile;
 
         private bool isActive;
         private bool isHoldingTile;
@@ -39,9 +42,13 @@ namespace Abduction.Player
             get { return isActive; }
             set
             {
+                if (!value && attachedTile != null)
+                    DropTile();
+
                 isActive = value;
                 beamCollider.enabled = isActive;
                 beamRenderer.enabled = isActive;
+                beamConnector.enabled = isActive;
             }
         }
 
@@ -62,6 +69,9 @@ namespace Abduction.Player
 
             beamCollider = GetComponent<BoxCollider2D>();
             beamCollider.enabled = false;
+
+            beamConnector = GetComponent<SpringJoint2D>();
+            beamConnector.enabled = false;
         }
 
         private void OnEnable()
@@ -82,10 +92,25 @@ namespace Abduction.Player
         {
             if (isActive)
             {
-                Vector2 direction = Aim.normalized;
+                if (attachedTile == null)
+                {
+                    Vector2 direction = Aim.normalized;
 
-                float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, degrees + 90);
+                    float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.Euler(0, 0, degrees + 90);
+                }
+                else
+                {
+                    Vector3 delta = attachedTile.transform.position - transform.position;
+                    float degrees = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
+
+                    // Rotate the parent of the sprite so the beam sprite stays centered around the character properly.
+                    // This is hacky, fix it later.
+                    beamRenderer.transform.parent.rotation = Quaternion.Euler(0, 0, degrees + 90);
+
+                    Vector3 scale = beamRenderer.transform.parent.localScale;
+                    beamRenderer.transform.localScale = new Vector3(scale.x, delta.magnitude, scale.z);
+                }
             }
         }
 
@@ -121,7 +146,23 @@ namespace Abduction.Player
 
         private void OnSetTilePickUp(TileWorldEventData data)
         {
-            //isHoldingTile = true;
+            isHoldingTile = true;
+
+            attachedTile = data.TileObject;
+            beamConnector.connectedBody = attachedTile.TileBody;
+        }
+
+        private void DropTile()
+        {
+            isHoldingTile = false;
+
+            attachedTile.Drop();
+            attachedTile = null;
+
+            beamRenderer.transform.localScale = Vector3.one;
+            beamRenderer.transform.parent.localRotation = Quaternion.identity;
+
+            beamConnector.connectedBody = null;
         }
 
         #endregion

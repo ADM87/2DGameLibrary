@@ -109,7 +109,7 @@ namespace Abduction.Player
                     beamRenderer.transform.parent.rotation = Quaternion.Euler(0, 0, degrees + 90);
 
                     Vector3 scale = beamRenderer.transform.parent.localScale;
-                    beamRenderer.transform.localScale = new Vector3(scale.x, delta.magnitude, scale.z);
+                    beamRenderer.transform.localScale = new Vector3(scale.x, delta.magnitude - 0.5f, scale.z);
                 }
             }
         }

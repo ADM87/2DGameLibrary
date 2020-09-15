@@ -203,17 +203,6 @@
                 },
                 {
                     "name": "",
-                    "id": "43ae4632-b5b7-4f3e-98ca-fe96bfac45b5",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "FireBeam",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "cf92bcb1-793a-4e6c-a85a-1fe3c845d0bd",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
@@ -230,6 +219,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "FireBeam",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "423fc8e4-9708-4d76-85e4-8b3bb1ec53bf",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "FireBeam",
                     "isComposite": false,
                     "isPartOfComposite": false

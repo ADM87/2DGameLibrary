@@ -12,6 +12,9 @@ namespace Abduction.Player
         private Transform beamSprite;
 
         [SerializeField]
+        private float maxStretchLength;
+
+        [SerializeField]
         private LayerMask collisionLayers;
 
         #endregion
@@ -104,12 +107,24 @@ namespace Abduction.Player
                     Vector3 delta = attachedTile.transform.position - transform.position;
                     float degrees = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
 
-                    // Rotate the parent of the sprite so the beam sprite stays centered around the character properly.
-                    // This is hacky, fix it later.
-                    beamRenderer.transform.parent.rotation = Quaternion.Euler(0, 0, degrees + 90);
+                    beamRenderer.transform.rotation = Quaternion.Euler(0, 0, degrees + 90);
 
-                    Vector3 scale = beamRenderer.transform.parent.localScale;
-                    beamRenderer.transform.localScale = new Vector3(scale.x, delta.magnitude - 0.5f, scale.z);
+                    float magnitude = delta.magnitude;
+
+                    if (magnitude > maxStretchLength)
+                    {
+                        DropTile();
+                    }
+                    else
+                    {
+                        Vector3 scale = beamRenderer.transform.localScale;
+                        beamRenderer.transform.localScale = new Vector3(scale.x, magnitude, scale.z);
+
+                        Color color = beamRenderer.color;
+                        color.a = 1 - (magnitude / maxStretchLength);
+
+                        beamRenderer.color = color;
+                    }
                 }
             }
         }
@@ -160,9 +175,14 @@ namespace Abduction.Player
             attachedTile = null;
 
             beamRenderer.transform.localScale = Vector3.one;
-            beamRenderer.transform.parent.localRotation = Quaternion.identity;
+            beamRenderer.transform.localRotation = Quaternion.identity;
 
             beamConnector.connectedBody = null;
+
+            Color color = beamRenderer.color;
+            color.a = 1;
+
+            beamRenderer.color = color;
         }
 
         #endregion

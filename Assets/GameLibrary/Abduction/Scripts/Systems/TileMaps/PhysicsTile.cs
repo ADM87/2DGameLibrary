@@ -53,7 +53,7 @@ namespace Abduction.Systems.TileMaps
             TileBody.simulated = true;
 
             tileRenderer.sprite = sprite;
-            tileCollider.size = size;
+            tileCollider.size = size * 0.9f;
         }
 
         public void Despawn()

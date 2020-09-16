@@ -21,10 +21,16 @@ namespace Abduction.Systems.TileMaps
         private GameObject physicsTilePrefab;
 
         [SerializeField]
-        private Tilemap map;
+        private Tilemap environment;
 
         [SerializeField]
-        private TileMapSettings mapSettings;
+        private Tilemap background;
+
+        [SerializeField]
+        private TileMapSettings environmentSettings;
+
+        [SerializeField]
+        private TileMapSettings backgroundSettings;
 
         #endregion
 
@@ -59,14 +65,15 @@ namespace Abduction.Systems.TileMaps
 
             grid = GetComponent<Grid>();
             mapGenerator = new TileMapGenerator();
-            transform.position = new Vector3(mapSettings.WorldOffset.x, mapSettings.WorldOffset.y, 0);
+            transform.position = new Vector3(environmentSettings.WorldOffset.x, environmentSettings.WorldOffset.y, 0);
 
             SetBounds();
         }
 
         private void Start()
         {
-            mapGenerator.GenerateMap(GetComponentInChildren<Tilemap>(), mapSettings);
+            mapGenerator.GenerateMap(environment, environmentSettings);
+            mapGenerator.GenerateMap(background, backgroundSettings);
         }
 
         private void OnEnable()
@@ -89,11 +96,11 @@ namespace Abduction.Systems.TileMaps
         {
             // Make sure we pick up the correct tile base off what direction the request is coming from.
             float radians = Mathf.Atan2(data.TileDirection.y, data.TileDirection.x);
-            float x = data.TilePosition.x + Mathf.Cos(radians) * (map.cellSize.x * 0.5f);
-            float y = data.TilePosition.y + Mathf.Sin(radians) * (map.cellSize.y * 0.5f);
+            float x = data.TilePosition.x + Mathf.Cos(radians) * (environment.cellSize.x * 0.5f);
+            float y = data.TilePosition.y + Mathf.Sin(radians) * (environment.cellSize.y * 0.5f);
 
             Vector3Int cell = grid.WorldToCell(new Vector2(x, y));
-            TileBase tile = map.GetTile(cell);
+            TileBase tile = environment.GetTile(cell);
 
             if (tile != null)
             {
@@ -101,12 +108,12 @@ namespace Abduction.Systems.TileMaps
 
                 physicsTile.transform.Reset();
                 physicsTile.transform.parent = physicsTileContainer;
-                physicsTile.transform.position = map.CellToWorld(cell) + (map.cellSize * 0.5f);
+                physicsTile.transform.position = environment.CellToWorld(cell) + (environment.cellSize * 0.5f);
 
                 physicsTile.gameObject.SetActive(true);
-                physicsTile.Spawn(map.GetSprite(cell), map.cellSize);
+                physicsTile.Spawn(environment.GetSprite(cell), environment.cellSize);
 
-                map.SetTile(cell, null);
+                environment.SetTile(cell, null);
 
                 Events.Dispatch(TileWorldEvents.SetTilePickUp, new TileWorldEventData { TileObject = physicsTile });
             }
@@ -148,7 +155,7 @@ namespace Abduction.Systems.TileMaps
             if (grid == null)
                 grid = GetComponent<Grid>();
 
-            if (mapSettings != null)
+            if (environmentSettings != null)
             {
                 Gizmos.color = Color.white;
 
@@ -167,8 +174,8 @@ namespace Abduction.Systems.TileMaps
 
         private void SetBounds()
         {
-            float width = mapSettings.MapSize.x * grid.cellSize.x;
-            float height = mapSettings.MapSize.y * grid.cellSize.y;
+            float width = environmentSettings.MapSize.x * grid.cellSize.x;
+            float height = environmentSettings.MapSize.y * grid.cellSize.y;
 
             float left = transform.position.x - width * 0.5f;
             float top = transform.position.y - height * 0.5f + grid.cellSize.y;

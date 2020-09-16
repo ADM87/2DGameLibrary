@@ -1,6 +1,7 @@
 using Abduction.Data;
 using Abduction.Events;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.InputSystem;
 
 namespace Abduction.Player
@@ -57,6 +58,7 @@ namespace Abduction.Player
         #region Properties
 
         public Vector2 Velocity { get; private set; }
+        public Light2D PlayerLight { get; private set; }
 
         #endregion
 
@@ -67,6 +69,7 @@ namespace Abduction.Player
             playerRenderer = playerSprite.GetComponent<SpriteRenderer>();
             playerCollider = GetComponent<BoxCollider2D>();
             playerBody = GetComponent<Rigidbody2D>();
+            PlayerLight = GetComponent<Light2D>();
         }
 
         private void Start()

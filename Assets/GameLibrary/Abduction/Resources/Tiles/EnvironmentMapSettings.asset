@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0aef94deb24ded842a82ad3d6f41031d, type: 3}
-  m_Name: TileMapSettings
+  m_Name: EnvironmentMapSettings
   m_EditorClassIdentifier: 
   mapSize: {x: 200, y: 100}
   worldOffset: {x: 0, y: -18}

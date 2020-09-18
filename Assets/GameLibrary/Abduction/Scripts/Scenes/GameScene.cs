@@ -63,6 +63,9 @@ namespace Abduction.Scenes
             cameraPosition.x = Mathf.Clamp(cameraPosition.x, bounds.xMin + horzExtent, bounds.xMax - horzExtent);
             cameraPosition.y = Mathf.Clamp(cameraPosition.y, bounds.yMin + vertExtent, bounds.yMax - vertExtent);
 
+            cameraPosition.x = Mathf.RoundToInt(cameraPosition.x * 100) * 0.01f;
+            cameraPosition.y = Mathf.RoundToInt(cameraPosition.y * 100) * 0.01f;
+
             gameCamera.transform.position = cameraPosition;
         }
 
@@ -75,6 +78,8 @@ namespace Abduction.Scenes
 
             globalLight.intensity = 1 - lightIntensity;
             playerController.PlayerLight.intensity = lightIntensity;
+
+            playerController.AdjectDropShadow(lightIntensity);
         }
     }
 }

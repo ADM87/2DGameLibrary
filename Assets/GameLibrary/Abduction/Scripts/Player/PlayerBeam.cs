@@ -124,6 +124,8 @@ namespace Abduction.Player
                         color.a = 1 - (magnitude / maxStretchLength);
 
                         beamRenderer.color = color;
+
+                        beamConnector.distance = Mathf.Clamp(beamConnector.distance, 0, beamConnector.connectedAnchor.magnitude);
                     }
                 }
             }

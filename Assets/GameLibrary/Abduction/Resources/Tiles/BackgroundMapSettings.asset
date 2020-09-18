@@ -20,8 +20,8 @@ MonoBehaviour:
     topTile: {fileID: 11400000, guid: 0f0fc30a7a297c34087673b258b0e03c, type: 2}
     fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
     blendInTile: {fileID: 0}
-    startDepth: 26
-    endDepth: 35
+    startDepth: 23
+    endDepth: 25
     blendPercentage: 0
     blendChance: 0
     curve:
@@ -77,7 +77,7 @@ MonoBehaviour:
     topTile: {fileID: 0}
     fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
     blendInTile: {fileID: 0}
-    startDepth: 35
+    startDepth: 25
     endDepth: 50
     blendPercentage: 0
     blendChance: 0

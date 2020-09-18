@@ -20,6 +20,15 @@ namespace Abduction.Player
         private float roll = 45f;
 
         [SerializeField]
+        private float maxDropShadowSize = 1.05f;
+
+        [SerializeField]
+        private float maxDropShadowDistance = 0.1f;
+
+        [SerializeField]
+        private float maxDropShadowAlpha = 0.5f;
+
+        [SerializeField]
         private Camera gameCamera;
 
         [SerializeField]
@@ -52,6 +61,8 @@ namespace Abduction.Player
 
         private bool fireLaser;
         private bool mouseAim;
+
+        private Material playerMaterial;
 
         #endregion
 
@@ -179,5 +190,19 @@ namespace Abduction.Player
         }
 
         #endregion
+
+        public void AdjectDropShadow(float intensity)
+        {
+            float size = Mathf.Lerp(1, maxDropShadowSize, intensity);
+            float x = maxDropShadowDistance * -(Velocity.x / speed);
+            float y = maxDropShadowDistance * -(Velocity.y / speed);
+
+            Color color = playerRenderer.material.GetColor("_ShadowColor");
+            color.a = intensity * maxDropShadowAlpha;
+
+            playerRenderer.material.SetVector("_ShadowSize", new Vector4(size, size));
+            playerRenderer.material.SetVector("_ShadowDistance", new Vector4(x, y));
+            playerRenderer.material.SetColor("_ShadowColor", color);
+        }
     }
 }

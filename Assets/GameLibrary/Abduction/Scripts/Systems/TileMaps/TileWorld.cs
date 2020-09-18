@@ -72,8 +72,8 @@ namespace Abduction.Systems.TileMaps
 
         private void Start()
         {
-            mapGenerator.GenerateMap(environment, environmentSettings);
-            mapGenerator.GenerateMap(background, backgroundSettings);
+            mapGenerator.GenerateMap(environment, environmentSettings, true);
+            mapGenerator.GenerateMap(background, backgroundSettings, false);
         }
 
         private void OnEnable()

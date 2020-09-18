@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 namespace Abduction.Systems.TileMaps
@@ -12,7 +13,7 @@ namespace Abduction.Systems.TileMaps
 
     public class TileMapGenerator
     {
-        public void GenerateMap(Tilemap tilemap, TileMapSettings settings)
+        public void GenerateMap(Tilemap tilemap, TileMapSettings settings, bool castsShadows)
         {
             TileMapLayer[] layers = settings.Layers;
             Array.Sort(layers, new TileLayerSorter());

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 namespace Abduction.Systems.TileMaps
 {
@@ -10,12 +11,20 @@ namespace Abduction.Systems.TileMaps
         [SerializeField]
         private float lifeSpan;
 
+        [SerializeField]
+        private float fadeOutTime;
+
         #endregion
 
         #region Member Variables
 
         private WaitForSeconds lifeWait;
+        private WaitUntil fadeWait;
+
         private Coroutine lifeRoutine;
+        private Coroutine fadeRoutine;
+
+        private float fadeElapsed;
 
         #endregion
 
@@ -23,6 +32,7 @@ namespace Abduction.Systems.TileMaps
 
         private SpriteRenderer tileRenderer;
         private BoxCollider2D tileCollider;
+        private ShadowCaster2D tileShadowCaster;
 
         #endregion
 
@@ -39,8 +49,19 @@ namespace Abduction.Systems.TileMaps
             tileRenderer = GetComponent<SpriteRenderer>();
             tileCollider = GetComponent<BoxCollider2D>();
             TileBody = GetComponent<Rigidbody2D>();
+            tileShadowCaster = GetComponent<ShadowCaster2D>();
 
             lifeWait = new WaitForSeconds(lifeSpan);
+            fadeWait = new WaitUntil(() =>
+            {
+                fadeElapsed = Mathf.Clamp(fadeElapsed + Time.deltaTime, 0, fadeOutTime);
+
+                Color color = tileRenderer.color;
+                color.a = Mathf.Lerp(color.a, 0, fadeElapsed / fadeOutTime);
+                tileRenderer.color = color;
+
+                return fadeElapsed == fadeOutTime;
+            });
         }
 
         #endregion
@@ -51,15 +72,21 @@ namespace Abduction.Systems.TileMaps
         {
             tileCollider.enabled = true;
             TileBody.simulated = true;
+            tileShadowCaster.enabled = true;
 
             tileRenderer.sprite = sprite;
             tileCollider.size = size * 0.9f;
+
+            Color color = tileRenderer.color;
+            color.a = 1;
+            tileRenderer.color = color;
         }
 
         public void Despawn()
         {
             tileCollider.enabled = false;
             TileBody.simulated = false;
+            tileShadowCaster.enabled = false;
 
             tileRenderer.sprite = null;
             tileCollider.size = Vector2.one * 0.001f;
@@ -87,6 +114,31 @@ namespace Abduction.Systems.TileMaps
             yield return lifeWait;
 
             lifeRoutine = null;
+
+            tileCollider.enabled = false;
+            TileBody.simulated = false;
+            tileShadowCaster.enabled = false;
+
+            FadeOut();
+        }
+
+        #endregion
+
+        #region Fade Out
+
+        private void FadeOut()
+        {
+            if (fadeRoutine != null)
+                StopCoroutine(fadeRoutine);
+
+            fadeRoutine = StartCoroutine(Fade());
+        }
+
+        private IEnumerator Fade()
+        {
+            fadeElapsed = 0;
+
+            yield return fadeWait;
 
             TileWorld.Events.Dispatch(TileWorldEvents.DespawnPhysicsTile, new Data.TileWorldEventData { TileObject = this });
         }

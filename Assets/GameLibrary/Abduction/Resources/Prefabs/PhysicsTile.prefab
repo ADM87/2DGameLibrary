@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeSpan: 5
-  fadeOutTime: 1
+  fadeOutTime: 2
 --- !u!114 &8016615957148878070
 MonoBehaviour:
   m_ObjectHideFlags: 0

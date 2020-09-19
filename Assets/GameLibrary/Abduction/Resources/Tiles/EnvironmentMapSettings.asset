@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aef94deb24ded842a82ad3d6f41031d, type: 3}
   m_Name: EnvironmentMapSettings
   m_EditorClassIdentifier: 
-  mapSize: {x: 200, y: 100}
+  mapSize: {x: 200, y: 75}
   worldOffset: {x: 0, y: -18}
   smoothingIterations: 5
   layers:
@@ -20,8 +20,8 @@ MonoBehaviour:
     topTile: {fileID: 11400000, guid: 0f0fc30a7a297c34087673b258b0e03c, type: 2}
     fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
     blendInTile: {fileID: 0}
-    startDepth: 25
-    endDepth: 35
+    startDepth: 15
+    endDepth: 25
     blendPercentage: 0
     blendChance: 0
     curve:
@@ -77,8 +77,8 @@ MonoBehaviour:
     topTile: {fileID: 0}
     fillTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
     blendInTile: {fileID: 0}
-    startDepth: 35
-    endDepth: 50
+    startDepth: 25
+    endDepth: 45
     blendPercentage: 0
     blendChance: 0
     curve:
@@ -134,8 +134,8 @@ MonoBehaviour:
     topTile: {fileID: 0}
     fillTile: {fileID: 11400000, guid: 4c827e3b9ebcb1445a53f9fe233cfe9a, type: 2}
     blendInTile: {fileID: 11400000, guid: e01498afc22dba241a099d9755fe3273, type: 2}
-    startDepth: 50
-    endDepth: 100
+    startDepth: 45
+    endDepth: 75
     blendPercentage: 0.6
     blendChance: 45
     curve:

@@ -178,7 +178,7 @@ namespace Abduction.Systems.TileMaps
             float height = environmentSettings.MapSize.y * grid.cellSize.y;
 
             float left = transform.position.x - width * 0.5f;
-            float top = transform.position.y - height * 0.5f + grid.cellSize.y;
+            float top = transform.position.y - height * 0.5f + grid.cellSize.y  * 1.5f;
 
             Bounds = new Rect(left, top, width, height);
         }

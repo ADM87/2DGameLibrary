@@ -1,4 +1,5 @@
-﻿using Abduction.Player;
+﻿using Abduction.Background;
+using Abduction.Player;
 using Abduction.Systems.TileMaps;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -27,6 +28,9 @@ namespace Abduction.Scenes
         [SerializeField]
         private PlayerController playerController;
 
+        [SerializeField]
+        private BackgroundController backgroundController;
+
         #endregion
 
         #region Updates
@@ -38,6 +42,8 @@ namespace Abduction.Scenes
             ClampPlayerToBounds(worldBounds);
             MoveCameraToPosition(playerController.transform.position, worldBounds);
             FadeLights();
+
+            backgroundController.Scroll(Time.fixedDeltaTime);
         }
 
         #endregion

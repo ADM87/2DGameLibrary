@@ -20,12 +20,30 @@ namespace Abduction.Background
         #region Member Variables
 
         private float previewCameraX;
+        private Vector2 screenSize;
 
         #endregion
 
         #region Life Cycle
 
-        private void Awake()
+        private void Start()
+        {
+            screenSize = new Vector2(Screen.width, Screen.height);
+            AdjustBackgroundSize();
+        }
+
+        private void Update()
+        {
+            if (screenSize.x != Screen.width || screenSize.y != Screen.height)
+            {
+                screenSize.Set(Screen.width, Screen.height);
+                AdjustBackgroundSize();
+            }
+        }
+
+        #endregion
+
+        private void AdjustBackgroundSize()
         {
             Sprite backgroundSprite = backgroundRenderer.sprite;
 
@@ -37,12 +55,10 @@ namespace Abduction.Background
             float scale = (viewWidth / spriteWidth);
 
             backgroundRenderer.transform.localScale = new Vector3(scale, 1, 1);
-            backgroundRenderer.material.mainTextureScale = backgroundRenderer.transform.localScale;
+            backgroundRenderer.material.SetVector("_Tiling", backgroundRenderer.transform.localScale);
 
             previewCameraX = gameCamera.transform.position.x;
         }
-
-        #endregion
 
         public void Scroll(float dt)
         {
@@ -55,9 +71,9 @@ namespace Abduction.Background
 
             float scroll = (delta * scrollSpeed) * dt;
 
-            Vector2 offset = backgroundRenderer.material.mainTextureOffset;
+            Vector2 offset = backgroundRenderer.material.GetVector("_Offset");
             offset.x = (1 + ((offset.x - scroll) % 1)) % 1;
-            backgroundRenderer.material.mainTextureOffset = offset;
+            backgroundRenderer.material.SetVector("_Offset", offset);
         }
     }
 }

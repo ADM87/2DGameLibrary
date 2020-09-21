@@ -28,6 +28,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         uses: webbertakken/unity-builder@v1.2
         with:
+          customParameters: '-nographics'
           unityVersion: 2020.1.0f1
           targetPlatform: WebGL
 

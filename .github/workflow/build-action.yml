@@ -1,0 +1,36 @@
+# name: Build/release
+
+# on:
+#   push:
+#     tags:
+#       - v1.*
+
+# jobs:
+#   build:
+#     name: Build my project ✨
+#     runs-on: ubuntu-latest
+#     steps:
+#       # Checkout
+#       - name: Checkout repository
+#         uses: actions/checkout@v2.3.2
+#         with:
+#           lfs: true
+
+#       # Cache
+#       - uses: actions/cache@v2.1.1
+#         with:
+#           path: Library
+#           key: Library
+
+#       # Build
+#       - name: Build project
+#         uses: webbertakken/unity-builder@v1.2
+#         with:
+#           unityVersion: 2020.*.**
+#           targetPlatform: WebGL
+
+#       # Output
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: Build
+#           path: build

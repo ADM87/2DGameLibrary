@@ -28,7 +28,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         uses: webbertakken/unity-builder@v1.2
         with:
-          unityVersion: 2020.*.**
+          unityVersion: 2020.1.0f1
           targetPlatform: WebGL
 
       # Output

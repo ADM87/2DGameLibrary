@@ -55,11 +55,7 @@ namespace Abduction.Systems.TileMaps
             fadeWait = new WaitUntil(() =>
             {
                 fadeElapsed = Mathf.Clamp(fadeElapsed + Time.deltaTime, 0, fadeOutTime);
-
-                Color color = tileRenderer.color;
-                color.a = Mathf.Lerp(color.a, 0, fadeElapsed / fadeOutTime);
-                tileRenderer.color = color;
-
+                tileRenderer.material.SetFloat("_Fade", 1 - (fadeElapsed / fadeOutTime));
                 return fadeElapsed == fadeOutTime;
             });
         }
@@ -77,9 +73,7 @@ namespace Abduction.Systems.TileMaps
             tileRenderer.sprite = sprite;
             tileCollider.size = size * 0.9f;
 
-            Color color = tileRenderer.color;
-            color.a = 1;
-            tileRenderer.color = color;
+            tileRenderer.material.SetFloat("_Fade", 1);
         }
 
         public void Despawn()
@@ -115,8 +109,6 @@ namespace Abduction.Systems.TileMaps
 
             lifeRoutine = null;
 
-            tileCollider.enabled = false;
-            TileBody.simulated = false;
             tileShadowCaster.enabled = false;
 
             FadeOut();
@@ -139,6 +131,9 @@ namespace Abduction.Systems.TileMaps
             fadeElapsed = 0;
 
             yield return fadeWait;
+
+            tileCollider.enabled = false;
+            TileBody.simulated = false;
 
             TileWorld.Events.Dispatch(TileWorldEvents.DespawnPhysicsTile, new Data.TileWorldEventData { TileObject = this });
         }

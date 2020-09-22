@@ -39,14 +39,11 @@ jobs:
       #       name: Build
       #       path: build
 
-  release:
-    name: Update to itch.io
-    runs-on: ubuntu-latest
-    steps:
-      - uses: josephbmanley/butler-publish-itchio-action@master
-        env:
-          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-          CHANNEL: windows
-          ITCH_GAME: abduction-prototype
-          ITCH_USER: amalley
-          PACKAGE: build/WebGL
+      - name: Publish to itch.io
+        uses: josephbmanley/butler-publish-itchio-action@master
+          env:
+            BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+            CHANNEL: windows
+            ITCH_GAME: abduction-prototype
+            ITCH_USER: amalley
+            PACKAGE: build/WebGL

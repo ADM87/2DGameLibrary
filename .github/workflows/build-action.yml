@@ -1,0 +1,48 @@
+name: Build/release
+
+on:
+  push:
+    tags:
+      - v1.*
+
+jobs:
+  build:
+    name: Build my project ✨
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2.3.2
+        with:
+          lfs: true
+
+      # Cache
+      - uses: actions/cache@v2.1.1
+        with:
+          path: Library
+          key: Library
+
+      # Build
+      - name: Build project
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        uses: webbertakken/unity-builder@v1.2
+        with:
+          customParameters: '-nographics'
+          unityVersion: 2020.1.0f1
+          targetPlatform: WebGL
+
+      # Output
+      # - name: Create artifact
+      #   uses: actions/upload-artifact@v2
+      #     with:
+      #       name: Build
+      #       path: build
+
+      - uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: windows
+          ITCH_GAME: abduction-prototype
+          ITCH_USER: amalley
+          PACKAGE: build/WebGL

@@ -3,7 +3,7 @@ name: Acquire activation file
 on:
   push:
     tags:
-      - Activation-v*
+      - Activation-*
 
 jobs:
   activation:

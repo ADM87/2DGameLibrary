@@ -33,7 +33,18 @@ jobs:
           targetPlatform: WebGL
 
       # Output
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Build
-          path: build
+      # - name: Create artifact
+      #   uses: actions/upload-artifact@v2
+      #     with:
+      #       name: Build
+      #       path: build
+
+      #Release
+      - name: Upload To itch.io
+        uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: windows
+          ITCH_GAME: abduction-prototype
+          ITCH_USER: amalley
+          PACKAGE: build/WebGL

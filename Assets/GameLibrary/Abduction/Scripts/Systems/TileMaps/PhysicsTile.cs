@@ -55,7 +55,7 @@ namespace Abduction.Systems.TileMaps
             fadeWait = new WaitUntil(() =>
             {
                 fadeElapsed = Mathf.Clamp(fadeElapsed + Time.deltaTime, 0, fadeOutTime);
-                tileRenderer.material.SetFloat("_Fade", 1 - (fadeElapsed / fadeOutTime));
+                tileRenderer.material.SetFloat("_DissolveFade", 1 - (fadeElapsed / fadeOutTime));
                 return fadeElapsed == fadeOutTime;
             });
         }
@@ -73,7 +73,7 @@ namespace Abduction.Systems.TileMaps
             tileRenderer.sprite = sprite;
             tileCollider.size = size * 0.9f;
 
-            tileRenderer.material.SetFloat("_Fade", 1);
+            tileRenderer.material.SetFloat("_DissolveFade", 1);
         }
 
         public void Despawn()

@@ -37,6 +37,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Fade: 1
+    - _DissolveFade: 1
+    - _DissolveScale: 25
+    - _DissolveThickness: 0.1
     - _EdgeThickness: 0.1
     - _EnableExternalAlpha: 0
     - _Fade: 1

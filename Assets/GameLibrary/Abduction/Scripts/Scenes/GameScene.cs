@@ -1,4 +1,6 @@
 ﻿using Abduction.Background;
+using Abduction.Events;
+using Abduction.Interfaces;
 using Abduction.Player;
 using Abduction.Systems.TileMaps;
 using UnityEngine;
@@ -33,6 +35,20 @@ namespace Abduction.Scenes
 
         #endregion
 
+        #region Life Cycle
+
+        private void OnEnable()
+        {
+            GlobalEvents.OnPlayerBeamTrigger += OnPlayerBeamTriggered;
+        }
+
+        private void OnDisable()
+        {
+            GlobalEvents.OnPlayerBeamTrigger -= OnPlayerBeamTriggered;
+        }
+
+        #endregion
+
         #region Updates
 
         private void FixedUpdate()
@@ -47,6 +63,33 @@ namespace Abduction.Scenes
         }
 
         #endregion
+
+        private void OnPlayerBeamTriggered(PlayerBeam playerBeam, int layer)
+        {
+            Vector3 origin = playerBeam.transform.position;
+            Vector3 direction = playerBeam.Aim;
+
+            RaycastHit2D hitInfo = Physics2D.CircleCast(origin, 0.3f, direction, 1.5f, 1 << layer);
+            IGrabbable grabbable = null;
+
+            if (hitInfo.collider == null)
+                return;
+
+            if (layer == LayerMask.NameToLayer("Environment"))
+            {
+                grabbable = tileWorld.GetTileInDirection(hitInfo.point, direction);
+            }
+            else if (layer == LayerMask.NameToLayer("PhysicsTiles"))
+            {
+                PhysicsTile tile = hitInfo.rigidbody.GetComponent<PhysicsTile>();
+
+                if (tile.AllowPickUp)
+                    grabbable = tile;
+            }
+
+            if (grabbable != null)
+                playerBeam.PickUp(grabbable);
+        }
 
         private void ClampPlayerToBounds(Rect bounds)
         {

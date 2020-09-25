@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8872625262632645980}
   - component: {fileID: 8872625262632645969}
   - component: {fileID: 8016615957148878070}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PhysicsTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

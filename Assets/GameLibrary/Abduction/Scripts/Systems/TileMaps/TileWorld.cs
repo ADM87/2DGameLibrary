@@ -7,7 +7,10 @@ using UnityEngine.Tilemaps;
 
 namespace Abduction.Systems.TileMaps
 {
-    public enum TileWorldEvents { RequestTilePickUp, SetTilePickUp, DespawnPhysicsTile }
+    public enum TileWorldEvents 
+    { 
+        DespawnPhysicsTile
+    }
 
     public class TileWorld : MonoBehaviour
     {
@@ -78,13 +81,11 @@ namespace Abduction.Systems.TileMaps
 
         private void OnEnable()
         {
-            Events.Subscribe(TileWorldEvents.RequestTilePickUp, OnRequestTilePickUp);
             Events.Subscribe(TileWorldEvents.DespawnPhysicsTile, OnDespawnPhysicsTile);
         }
 
         private void OnDisable()
         {
-            Events.Unsubscribe(TileWorldEvents.RequestTilePickUp, OnRequestTilePickUp);
             Events.Unsubscribe(TileWorldEvents.DespawnPhysicsTile, OnDespawnPhysicsTile);
         }
 
@@ -92,31 +93,31 @@ namespace Abduction.Systems.TileMaps
 
         #region TileWorld Event Handlers
 
-        private void OnRequestTilePickUp(TileWorldEventData data)
+        public PhysicsTile GetTileInDirection(Vector3 worldPoint, Vector3 direction)
         {
             // Make sure we pick up the correct tile base off what direction the request is coming from.
-            float radians = Mathf.Atan2(data.TileDirection.y, data.TileDirection.x);
-            float x = data.TilePosition.x + Mathf.Cos(radians) * (environment.cellSize.x * 0.5f);
-            float y = data.TilePosition.y + Mathf.Sin(radians) * (environment.cellSize.y * 0.5f);
+            float radians = Mathf.Atan2(direction.y, direction.x);
+            float x = worldPoint.x + Mathf.Cos(radians) * (environment.cellSize.x * 0.5f);
+            float y = worldPoint.y + Mathf.Sin(radians) * (environment.cellSize.y * 0.5f);
 
             Vector3Int cell = grid.WorldToCell(new Vector2(x, y));
             TileBase tile = environment.GetTile(cell);
 
-            if (tile != null)
-            {
-                PhysicsTile physicsTile = physicsTiles.Take();
+            if (tile == null)
+                return null;
 
-                physicsTile.transform.Reset();
-                physicsTile.transform.parent = physicsTileContainer;
-                physicsTile.transform.position = environment.CellToWorld(cell) + (environment.cellSize * 0.5f);
+            PhysicsTile physicsTile = physicsTiles.Take();
 
-                physicsTile.gameObject.SetActive(true);
-                physicsTile.Spawn(environment.GetSprite(cell), environment.cellSize);
+            physicsTile.transform.Reset();
+            physicsTile.transform.parent = physicsTileContainer;
+            physicsTile.transform.position = environment.CellToWorld(cell) + (environment.cellSize * 0.5f);
 
-                environment.SetTile(cell, null);
+            physicsTile.gameObject.SetActive(true);
+            physicsTile.Spawn(environment.GetSprite(cell), environment.cellSize);
 
-                Events.Dispatch(TileWorldEvents.SetTilePickUp, new TileWorldEventData { TileObject = physicsTile });
-            }
+            environment.SetTile(cell, null);
+
+            return physicsTile;
         }
 
         private void OnDespawnPhysicsTile(TileWorldEventData data)

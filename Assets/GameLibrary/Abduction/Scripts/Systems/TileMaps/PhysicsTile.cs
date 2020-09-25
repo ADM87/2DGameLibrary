@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using Abduction.Interfaces;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
 namespace Abduction.Systems.TileMaps
 {
-    public class PhysicsTile : MonoBehaviour
+    public class PhysicsTile : MonoBehaviour,
+        IGrabbable
     {
         #region Serialized Fields
 
@@ -38,7 +40,8 @@ namespace Abduction.Systems.TileMaps
 
         #region Properties
 
-        public Rigidbody2D TileBody { get; private set; }
+        public Rigidbody2D GrabbableBody { get; private set; }
+        public bool AllowPickUp { get; private set; }
 
         #endregion
 
@@ -48,8 +51,8 @@ namespace Abduction.Systems.TileMaps
         {
             tileRenderer = GetComponent<SpriteRenderer>();
             tileCollider = GetComponent<BoxCollider2D>();
-            TileBody = GetComponent<Rigidbody2D>();
             tileShadowCaster = GetComponent<ShadowCaster2D>();
+            GrabbableBody = GetComponent<Rigidbody2D>();
 
             lifeWait = new WaitForSeconds(lifeSpan);
             fadeWait = new WaitUntil(() =>
@@ -67,8 +70,10 @@ namespace Abduction.Systems.TileMaps
         public void Spawn(Sprite sprite, Vector2 size)
         {
             tileCollider.enabled = true;
-            TileBody.simulated = true;
+            GrabbableBody.simulated = true;
             tileShadowCaster.enabled = true;
+
+            AllowPickUp = true;
 
             tileRenderer.sprite = sprite;
             tileCollider.size = size * 0.9f;
@@ -79,14 +84,21 @@ namespace Abduction.Systems.TileMaps
         public void Despawn()
         {
             tileCollider.enabled = false;
-            TileBody.simulated = false;
+            GrabbableBody.simulated = false;
             tileShadowCaster.enabled = false;
+
+            AllowPickUp = false;
 
             tileRenderer.sprite = null;
             tileCollider.size = Vector2.one * 0.001f;
         }
 
-        public void Drop()
+        public void OnPickedUp()
+        {
+            StopLifeCountDown();
+        }
+
+        public void OnDropped()
         {
             BeginLifeCountDown();
         }
@@ -97,10 +109,17 @@ namespace Abduction.Systems.TileMaps
 
         private void BeginLifeCountDown()
         {
+            StopLifeCountDown();
+
+            lifeRoutine = StartCoroutine(LifeCountDown());
+        }
+
+        private void StopLifeCountDown()
+        {
             if (lifeRoutine != null)
                 StopCoroutine(lifeRoutine);
 
-            lifeRoutine = StartCoroutine(LifeCountDown());
+            lifeRoutine = null;
         }
 
         private IEnumerator LifeCountDown()
@@ -128,12 +147,12 @@ namespace Abduction.Systems.TileMaps
 
         private IEnumerator Fade()
         {
-            fadeElapsed = 0;
+            AllowPickUp = false;
 
             yield return fadeWait;
 
             tileCollider.enabled = false;
-            TileBody.simulated = false;
+            GrabbableBody.simulated = false;
 
             TileWorld.Events.Dispatch(TileWorldEvents.DespawnPhysicsTile, new Data.TileWorldEventData { TileObject = this });
         }

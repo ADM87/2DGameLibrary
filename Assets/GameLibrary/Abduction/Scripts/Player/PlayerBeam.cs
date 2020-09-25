@@ -1,4 +1,6 @@
 ﻿using Abduction.Data;
+using Abduction.Events;
+using Abduction.Interfaces;
 using Abduction.Systems.TileMaps;
 using UnityEngine;
 
@@ -29,10 +31,8 @@ namespace Abduction.Player
 
         #region Member Variables
 
-        private PhysicsTile attachedTile;
-
+        private IGrabbable currentGrabbable;
         private bool isActive;
-        private bool isHoldingTile;
 
         #endregion
 
@@ -45,7 +45,7 @@ namespace Abduction.Player
             get { return isActive; }
             set
             {
-                if (!value && attachedTile != null)
+                if (!value && currentGrabbable != null)
                     DropTile();
 
                 isActive = value;
@@ -77,16 +77,6 @@ namespace Abduction.Player
             beamConnector.enabled = false;
         }
 
-        private void OnEnable()
-        {
-            TileWorld.Events.Subscribe(TileWorldEvents.SetTilePickUp, OnSetTilePickUp);
-        }
-
-        private void OnDisable()
-        {
-            TileWorld.Events.Unsubscribe(TileWorldEvents.SetTilePickUp, OnSetTilePickUp);
-        }
-
         #endregion
 
         #region Updates
@@ -95,7 +85,7 @@ namespace Abduction.Player
         {
             if (isActive)
             {
-                if (attachedTile == null)
+                if (currentGrabbable == null)
                 {
                     Vector2 direction = Aim.normalized;
 
@@ -104,7 +94,7 @@ namespace Abduction.Player
                 }
                 else
                 {
-                    Vector3 delta = attachedTile.transform.position - transform.position;
+                    Vector3 delta = currentGrabbable.transform.position - transform.position;
                     float degrees = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
 
                     beamRenderer.transform.rotation = Quaternion.Euler(0, 0, degrees + 90);
@@ -124,7 +114,6 @@ namespace Abduction.Player
                         color.a = 1 - (magnitude / maxStretchLength);
 
                         beamRenderer.color = color;
-
                         beamConnector.distance = Mathf.Clamp(beamConnector.distance, 0, beamConnector.connectedAnchor.magnitude);
                     }
                 }
@@ -138,43 +127,33 @@ namespace Abduction.Player
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if ((collisionLayers.value & (1 << collider.gameObject.layer)) > 0)
-                PickUpTile();
+                GlobalEvents.OnPlayerBeamTrigger?.Invoke(this, collider.gameObject.layer);
         }
 
         #endregion
 
-        #region Tile Pick Up 
+        #region Pick Up / Drop
 
-        private void PickUpTile()
+        public void PickUp(IGrabbable grabbable)
         {
-            if (isHoldingTile)
-                return;
-
-            RaycastHit2D hitInfo = Physics2D.CircleCast(transform.position, 0.3f, Aim, 1.5f, collisionLayers.value);
-            if (hitInfo.collider != null)
+            if (currentGrabbable != null)
             {
-                TileWorld.Events.Dispatch(TileWorldEvents.RequestTilePickUp, new TileWorldEventData
-                {
-                    TilePosition = hitInfo.point,
-                    TileDirection = Aim
-                });
+                // TODO - What should happen if the beam is told to pick something up when it is already holding something?
+                grabbable.OnDropped();
+                return;
             }
-        }
+            grabbable.OnPickedUp();
 
-        private void OnSetTilePickUp(TileWorldEventData data)
-        {
-            isHoldingTile = true;
+            beamConnector.connectedBody = grabbable.GrabbableBody;
+            currentGrabbable = grabbable;
 
-            attachedTile = data.TileObject;
-            beamConnector.connectedBody = attachedTile.TileBody;
+            beamCollider.enabled = false;
         }
 
         private void DropTile()
         {
-            isHoldingTile = false;
-
-            attachedTile.Drop();
-            attachedTile = null;
+            currentGrabbable.OnDropped();
+            currentGrabbable = null;
 
             beamRenderer.transform.localScale = Vector3.one;
             beamRenderer.transform.localRotation = Quaternion.identity;

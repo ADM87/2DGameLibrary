@@ -62,8 +62,8 @@ namespace Abduction.Player
         private void Fire()
         {
             float angle = Mathf.Atan2(Aim.y, Aim.x);
-            float x = (Mathf.Cos(angle) * 1.5f) + transform.position.x;
-            float y = (Mathf.Sin(angle) * 1.5f) + transform.position.y;
+            float x = (Mathf.Cos(angle) * 0.5f) + transform.position.x;
+            float y = (Mathf.Sin(angle) * 0.5f) + transform.position.y;
 
             ProjectileSystem.Events.Dispatch(ProjectileEvents.Spawn, new ProjectileEventData
             {

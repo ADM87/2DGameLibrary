@@ -858,7 +858,7 @@ MonoBehaviour:
   maxStretchLength: 7
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1536
 --- !u!231 &738799566
 SpringJoint2D:
   m_ObjectHideFlags: 0

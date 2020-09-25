@@ -62,8 +62,6 @@ namespace Abduction.Player
         private bool fireLaser;
         private bool mouseAim;
 
-        private Material playerMaterial;
-
         #endregion
 
         #region Properties
@@ -97,20 +95,20 @@ namespace Abduction.Player
 
         private void OnEnable()
         {
-            InputEvents.Game.Subscribe(GameEvents.Move, OnMove);
-            InputEvents.Game.Subscribe(GameEvents.MouseAim, OnMouseAim);
-            InputEvents.Game.Subscribe(GameEvents.JoystickAim, OnJoystickAim);
-            InputEvents.Game.Subscribe(GameEvents.FireBeam, OnFireBeam);
-            InputEvents.Game.Subscribe(GameEvents.FireLaser, OnFireLaser);
+            InputEvents.Game.Subscribe(GameInputEvents.Move, OnMove);
+            InputEvents.Game.Subscribe(GameInputEvents.MouseAim, OnMouseAim);
+            InputEvents.Game.Subscribe(GameInputEvents.JoystickAim, OnJoystickAim);
+            InputEvents.Game.Subscribe(GameInputEvents.FireBeam, OnFireBeam);
+            InputEvents.Game.Subscribe(GameInputEvents.FireLaser, OnFireLaser);
         }
 
         private void OnDisable()
         {
-            InputEvents.Game.Unsubscribe(GameEvents.Move, OnMove);
-            InputEvents.Game.Unsubscribe(GameEvents.MouseAim, OnMouseAim);
-            InputEvents.Game.Unsubscribe(GameEvents.JoystickAim, OnJoystickAim);
-            InputEvents.Game.Unsubscribe(GameEvents.FireBeam, OnFireBeam);
-            InputEvents.Game.Unsubscribe(GameEvents.FireLaser, OnFireLaser);
+            InputEvents.Game.Unsubscribe(GameInputEvents.Move, OnMove);
+            InputEvents.Game.Unsubscribe(GameInputEvents.MouseAim, OnMouseAim);
+            InputEvents.Game.Unsubscribe(GameInputEvents.JoystickAim, OnJoystickAim);
+            InputEvents.Game.Unsubscribe(GameInputEvents.FireBeam, OnFireBeam);
+            InputEvents.Game.Unsubscribe(GameInputEvents.FireLaser, OnFireLaser);
         }
 
         #endregion

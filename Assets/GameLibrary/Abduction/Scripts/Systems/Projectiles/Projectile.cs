@@ -1,4 +1,6 @@
 ﻿using Abduction.Data;
+using Abduction.Interfaces;
+using Abduction.Systems.TileMaps;
 using System.Collections;
 using UnityEngine;
 
@@ -10,6 +12,9 @@ namespace Abduction.Systems.Projectiles
 
         [SerializeField]
         private float burstTime;
+
+        [SerializeField]
+        private float burstRadius;
 
         [SerializeField]
         private float speed;
@@ -87,11 +92,7 @@ namespace Abduction.Systems.Projectiles
             float width = sprite.rect.width / sprite.pixelsPerUnit;
             float height = sprite.rect.height / sprite.pixelsPerUnit;
 
-            projectileCollider.size = new Vector2(width, height);
-
-            Vector2 normalizedPivot = new Vector2(sprite.pivot.x / sprite.rect.width, sprite.pivot.y / sprite.rect.height);
-
-            projectileCollider.offset = (Vector2.one * 0.5f) + new Vector2(-normalizedPivot.x, normalizedPivot.y);
+            projectileCollider.size = new Vector2(width, height) * 0.75f;
             projectileBody.velocity = direction.normalized * speed;
 
             float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

@@ -148,6 +148,7 @@ namespace Abduction.Systems.TileMaps
         private IEnumerator Fade()
         {
             AllowPickUp = false;
+            fadeElapsed = 0;
 
             yield return fadeWait;
 

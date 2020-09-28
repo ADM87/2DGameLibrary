@@ -2,6 +2,7 @@
 using Abduction.Events;
 using Abduction.Extensions;
 using Abduction.Pooling;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -93,33 +94,6 @@ namespace Abduction.Systems.TileMaps
 
         #region TileWorld Event Handlers
 
-        public PhysicsTile GetTileInDirection(Vector3 worldPoint, Vector3 direction)
-        {
-            // Make sure we pick up the correct tile base off what direction the request is coming from.
-            float radians = Mathf.Atan2(direction.y, direction.x);
-            float x = worldPoint.x + Mathf.Cos(radians) * (environment.cellSize.x * 0.5f);
-            float y = worldPoint.y + Mathf.Sin(radians) * (environment.cellSize.y * 0.5f);
-
-            Vector3Int cell = grid.WorldToCell(new Vector2(x, y));
-            TileBase tile = environment.GetTile(cell);
-
-            if (tile == null)
-                return null;
-
-            PhysicsTile physicsTile = physicsTiles.Take();
-
-            physicsTile.transform.Reset();
-            physicsTile.transform.parent = physicsTileContainer;
-            physicsTile.transform.position = environment.CellToWorld(cell) + (environment.cellSize * 0.5f);
-
-            physicsTile.gameObject.SetActive(true);
-            physicsTile.Spawn(environment.GetSprite(cell), environment.cellSize);
-
-            environment.SetTile(cell, null);
-
-            return physicsTile;
-        }
-
         private void OnDespawnPhysicsTile(TileWorldEventData data)
         {
             PhysicsTile physicsTile = data.TileObject;
@@ -172,6 +146,65 @@ namespace Abduction.Systems.TileMaps
         }
 
         #endregion
+
+        public PhysicsTile GetTileInDirection(Vector3 worldPoint, Vector3 direction)
+        {
+            // Make sure we pick up the correct tile base off what direction the request is coming from.
+            float radians = Mathf.Atan2(direction.y, direction.x);
+            float x = worldPoint.x + Mathf.Cos(radians) * (environment.cellSize.x * 0.5f);
+            float y = worldPoint.y + Mathf.Sin(radians) * (environment.cellSize.y * 0.5f);
+
+            Vector3Int cell = grid.WorldToCell(new Vector2(x, y));
+            return GetPhysicsTileAt(cell);
+        }
+
+        public PhysicsTile[] GetNearByTiles(Vector3 worldPoint, int radius)
+        {
+            Vector3Int cell = grid.WorldToCell(worldPoint);
+            List<PhysicsTile> tiles = new List<PhysicsTile>();
+
+            int minX = cell.x - radius;
+            int maxX = cell.x + radius;
+
+            for (int x = minX; x <= maxX; x++)
+            {
+                int dx = (cell.x - x);
+                int dy = Mathf.RoundToInt(Mathf.Sqrt(radius * radius - dx * dx));
+
+                int minY = cell.y - dy;
+                int maxY = cell.y + dy;
+
+                for (int y = minY; y <= maxY; y++)
+                {
+                    PhysicsTile tile = GetPhysicsTileAt(new Vector3Int(x, y, 0));
+                    if (tile != null)
+                        tiles.Add(tile);
+                }
+            }
+
+            return tiles.ToArray();
+        }
+
+        private PhysicsTile GetPhysicsTileAt(Vector3Int cell)
+        {
+            TileBase tile = environment.GetTile(cell);
+
+            if (tile == null)
+                return null;
+
+            PhysicsTile physicsTile = physicsTiles.Take();
+
+            physicsTile.transform.Reset();
+            physicsTile.transform.parent = physicsTileContainer;
+            physicsTile.transform.position = environment.CellToWorld(cell) + (environment.cellSize * 0.5f);
+
+            physicsTile.gameObject.SetActive(true);
+            physicsTile.Spawn(environment.GetSprite(cell), environment.cellSize);
+
+            environment.SetTile(cell, null);
+
+            return physicsTile;
+        }
 
         private void SetBounds()
         {

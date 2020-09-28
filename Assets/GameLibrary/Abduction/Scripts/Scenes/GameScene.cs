@@ -2,6 +2,7 @@
 using Abduction.Events;
 using Abduction.Interfaces;
 using Abduction.Player;
+using Abduction.Systems.Projectiles;
 using Abduction.Systems.TileMaps;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -40,11 +41,13 @@ namespace Abduction.Scenes
         private void OnEnable()
         {
             GlobalEvents.OnPlayerBeamTrigger += OnPlayerBeamTriggered;
+            GlobalEvents.OnProjectBurstTrigger += OnProjectileBurstTrigged;
         }
 
         private void OnDisable()
         {
             GlobalEvents.OnPlayerBeamTrigger -= OnPlayerBeamTriggered;
+            GlobalEvents.OnProjectBurstTrigger -= OnProjectileBurstTrigged;
         }
 
         #endregion
@@ -64,6 +67,8 @@ namespace Abduction.Scenes
 
         #endregion
 
+        #region Global Event Handlers
+
         private void OnPlayerBeamTriggered(PlayerBeam playerBeam, int layer)
         {
             Vector3 origin = playerBeam.transform.position;
@@ -75,21 +80,62 @@ namespace Abduction.Scenes
             if (hitInfo.collider == null)
                 return;
 
-            if (layer == LayerMask.NameToLayer("Environment"))
+            string layerName = LayerMask.LayerToName(layer);
+            switch (layerName)
             {
-                grabbable = tileWorld.GetTileInDirection(hitInfo.point, direction);
-            }
-            else if (layer == LayerMask.NameToLayer("PhysicsTiles"))
-            {
-                PhysicsTile tile = hitInfo.rigidbody.GetComponent<PhysicsTile>();
+                case "Environment":
+                    grabbable = tileWorld.GetTileInDirection(hitInfo.point, direction);
+                    break;
 
-                if (tile.AllowPickUp)
-                    grabbable = tile;
+                case "PhysicsTiles":
+                    PhysicsTile tile = hitInfo.rigidbody.GetComponent<PhysicsTile>();
+
+                    if (tile.AllowPickUp)
+                        grabbable = tile;
+                    break;
             }
 
             if (grabbable != null)
                 playerBeam.PickUp(grabbable);
         }
+
+        private void OnProjectileBurstTrigged(Projectile projectile, int layers)
+        {
+            Vector3 origin = projectile.transform.position;
+            Vector3 velocity = projectile.Velocity;
+
+            float radius = projectile.BurstRadius;
+            float burstStrength = velocity.magnitude * 10; // TODO - Remove HC
+
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(origin, radius, layers);
+
+            foreach (Collider2D collider in colliders)
+            {
+                int layer = collider.gameObject.layer;
+
+                string layerName = LayerMask.LayerToName(layer);
+                switch (layerName)
+                {
+                    case "Environment":
+                        PhysicsTile[] tiles = tileWorld.GetNearByTiles(origin, (int)radius);
+
+                        for (int i = 0; i < tiles.Length; i++)
+                            tiles[i].ApplyBurstImpact(origin, burstStrength);
+
+                        break;
+
+                    case "PhysicsTiles":
+                        PhysicsTile tile = collider.gameObject.GetComponent<PhysicsTile>();
+
+                        // AllowPickUp might cause issues. Revisit.
+                        if (tile.AllowPickUp)
+                            tile.ApplyBurstImpact(origin, burstStrength);
+                        break;
+                }
+            }
+        }
+
+        #endregion
 
         private void ClampPlayerToBounds(Rect bounds)
         {

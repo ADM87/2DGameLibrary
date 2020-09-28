@@ -1,6 +1,5 @@
 ﻿using Abduction.Data;
-using Abduction.Interfaces;
-using Abduction.Systems.TileMaps;
+using Abduction.Events;
 using System.Collections;
 using UnityEngine;
 
@@ -46,6 +45,13 @@ namespace Abduction.Systems.Projectiles
         private Coroutine lifeRoutine;
 
         private string senderTag;
+
+        #endregion
+
+        #region Properties
+
+        public Vector3 Velocity { get { return projectileBody.velocity; } }
+        public float BurstRadius { get { return burstRadius; } }
 
         #endregion
 
@@ -144,6 +150,8 @@ namespace Abduction.Systems.Projectiles
         {
             if (lifeRoutine != null)
                 StopCoroutine(lifeRoutine);
+
+            GlobalEvents.OnProjectBurstTrigger(this, collisionLayers);
 
             projectileRenderer.sprite = burstSprite;
 

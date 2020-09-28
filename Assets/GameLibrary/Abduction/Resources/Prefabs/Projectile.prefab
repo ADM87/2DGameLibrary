@@ -145,9 +145,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   burstTime: 0.06
-  burstRadius: 3
+  burstRadius: 2
   speed: 20
   lifeSpan: 1
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 1792

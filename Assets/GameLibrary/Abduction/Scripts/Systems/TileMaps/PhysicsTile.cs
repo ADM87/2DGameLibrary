@@ -159,5 +159,15 @@ namespace Abduction.Systems.TileMaps
         }
 
         #endregion
+
+        public void ApplyBurstImpact(Vector3 origin, float strength)
+        {
+            GrabbableBody.velocity = Vector3.zero;
+
+            Vector3 direction = transform.position - origin;
+            GrabbableBody.AddForce(direction * strength);
+
+            OnDropped();
+        }
     }
 }

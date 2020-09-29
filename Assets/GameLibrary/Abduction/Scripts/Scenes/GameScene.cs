@@ -102,10 +102,9 @@ namespace Abduction.Scenes
         private void OnProjectileBurstTrigged(Projectile projectile, int layers)
         {
             Vector3 origin = projectile.transform.position;
-            Vector3 velocity = projectile.Velocity;
 
             float radius = projectile.BurstRadius;
-            float burstStrength = velocity.magnitude * 10; // TODO - Remove HC
+            float burstStrength = 10; // TODO - Remove HC
 
             Collider2D[] colliders = Physics2D.OverlapCircleAll(origin, radius, layers);
 
@@ -122,14 +121,6 @@ namespace Abduction.Scenes
                         for (int i = 0; i < tiles.Length; i++)
                             tiles[i].ApplyBurstImpact(origin, burstStrength);
 
-                        break;
-
-                    case "PhysicsTiles":
-                        PhysicsTile tile = collider.gameObject.GetComponent<PhysicsTile>();
-
-                        // AllowPickUp might cause issues. Revisit.
-                        if (tile.AllowPickUp)
-                            tile.ApplyBurstImpact(origin, burstStrength);
                         break;
                 }
             }

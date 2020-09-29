@@ -162,12 +162,10 @@ namespace Abduction.Systems.TileMaps
 
         public void ApplyBurstImpact(Vector3 origin, float strength)
         {
-            GrabbableBody.velocity = Vector3.zero;
-
             Vector3 direction = transform.position - origin;
-            GrabbableBody.AddForce(direction * strength);
+            GrabbableBody.AddForce(direction * strength, ForceMode2D.Impulse);
 
-            OnDropped();
+            FadeOut();
         }
     }
 }

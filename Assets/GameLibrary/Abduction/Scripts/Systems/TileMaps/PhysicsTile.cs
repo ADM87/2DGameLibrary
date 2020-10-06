@@ -150,6 +150,11 @@ namespace Abduction.Systems.TileMaps
             AllowPickUp = false;
             fadeElapsed = 0;
 
+            float offsetX = Random.Range(-100, 100);
+            float offsetY = Random.Range(-100, 100);
+
+            tileRenderer.material.SetVector("_DissolveOffset", new Vector4(offsetX, offsetY));
+
             yield return fadeWait;
 
             tileCollider.enabled = false;
@@ -164,6 +169,8 @@ namespace Abduction.Systems.TileMaps
         {
             Vector3 direction = transform.position - origin;
             GrabbableBody.AddForce(direction * strength, ForceMode2D.Impulse);
+
+            tileShadowCaster.enabled = false;
 
             FadeOut();
         }

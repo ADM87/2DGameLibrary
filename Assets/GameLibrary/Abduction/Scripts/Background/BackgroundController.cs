@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Abduction.Utils;
+using UnityEngine;
 
 namespace Abduction.Background
 {
@@ -19,8 +20,7 @@ namespace Abduction.Background
 
         #region Member Variables
 
-        private float previewCameraX;
-        private Vector2 screenSize;
+        private float previousCameraX;
 
         #endregion
 
@@ -28,20 +28,22 @@ namespace Abduction.Background
 
         private void Start()
         {
-            screenSize = new Vector2(Screen.width, Screen.height);
             AdjustBackgroundSize();
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            if (screenSize.x != Screen.width || screenSize.y != Screen.height)
-            {
-                screenSize.Set(Screen.width, Screen.height);
-                AdjustBackgroundSize();
-            }
+            ScreenUtils.Events.Subscribe(ScreenEvents.Resize, OnResize);
+        }
+
+        private void OnDisable()
+        {
+            ScreenUtils.Events.Unsubscribe(ScreenEvents.Resize, OnResize);
         }
 
         #endregion
+
+        private void OnResize(ScreenEventData data) => AdjustBackgroundSize();
 
         private void AdjustBackgroundSize()
         {
@@ -57,7 +59,7 @@ namespace Abduction.Background
             backgroundRenderer.transform.localScale = new Vector3(scale, 1, 1);
             backgroundRenderer.material.SetVector("_Tiling", backgroundRenderer.transform.localScale);
 
-            previewCameraX = gameCamera.transform.position.x;
+            previousCameraX = gameCamera.transform.position.x;
         }
 
         public void Scroll(float dt)
@@ -66,8 +68,8 @@ namespace Abduction.Background
             position.x = gameCamera.transform.position.x;
             transform.position = position;
 
-            float delta = previewCameraX - position.x;
-            previewCameraX = position.x;
+            float delta = previousCameraX - position.x;
+            previousCameraX = position.x;
 
             float scroll = (delta * scrollSpeed) * dt;
 
